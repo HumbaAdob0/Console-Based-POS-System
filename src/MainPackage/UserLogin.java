@@ -6,6 +6,12 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.util.Scanner;
 
+
+
+/*
+ * This UserLogin Class is the one resposible for determining whether th account login exist
+ * in the database. This Class also verify what role you are trying to login.
+ */
 public class UserLogin {
 	private static final String database_URL = "jdbc:mysql://127.0.0.1:3306/pos_database";
 	private static final String database_username = "root";
@@ -13,11 +19,20 @@ public class UserLogin {
 	
 	Scanner scan = new Scanner(System.in);
 	
-	
+	/*
+	 * Since eclipse dont support clear console function, I premitively made a bunch of 
+	 * newlines, as if the console is getting clear after a certain frame.
+	 */
 	void newLine() {
 		System.out.println("\n\n\n\n\n\n\n\n\n\n\n\n\n\n");
 	}
 	
+	
+	
+	/*
+	 * This method is where you input your username & password.
+	 * I've enclosed the method with a do while loop so that everytime we input a wrong credential it would exit out the program.
+	 */
 	void Login(){
 		boolean ctr = true;
 		do{
@@ -30,49 +45,41 @@ public class UserLogin {
 			System.out.print("Password: ");
 			String password = scan.nextLine();
 			
+			//this connection here creates a connection to our databse using the private global variable initialized above.
 			try(Connection connect = DriverManager.getConnection(database_URL,database_username, database_password)){
-				String SQLquery = "SELECT acc_type FROM accounts WHERE username = ?  AND password = ?";
+				String SQLquery = "SELECT acc_type FROM accounts WHERE username = ?  AND password = ?"; 
 				
 				
 				PreparedStatement statement = connect.prepareStatement(SQLquery);
-					statement.setString(1, username);
-					statement.setString(2, password);
+					statement.setString(1, username); // number 1 replaces the first '?' in the query with the value of username
+					statement.setString(2, password); // number 2 replaces the second '?' in the query with the value of password
 					
 					
-				ResultSet result = statement.executeQuery();
+				ResultSet result = statement.executeQuery(); //this execute our query and returns rows of data stored in the ResultSet
 	
-					if(result.next()){
+					if(result.next()){ //the rows of data is iterated through .next(), if this iterates it returns a true value
 	
-						String acc_type = result.getString("acc_type");
-						switch(acc_type.toLowerCase()) {
+						String acc_type = result.getString("acc_type"); // this retrives data from the column named 'acc_type' from our ResultSet
+						switch(acc_type.toLowerCase()) { // this makes out retrived data lowercase, so that it wont get an error if we compare it to a predermined value 
 							case "admin":
-						
 								newLine();
-								//System.out.println("admin account");
-								Admin admin = new Admin(username);
+								Admin admin = new Admin(username); // execute class admin 
 							break;
 							
 							case "moderator":
-						
 								newLine();
-								//System.out.println("moderator account");
-								Moderator moderator = new Moderator(username);
+								Moderator moderator = new Moderator(username); // execute class moderator
 							break;
 							
 							case "cashier":
-						
 								newLine();
-								//System.out.println("cashier account");
-								Base_user base_user = new Base_user(username);
+								Base_user base_user = new Base_user(username); // execute class base_user
 							break;
-							
-							default:
-							System.out.println("\nERROR: Role not found!");
 						}
 						
 					}
 					else {
-						System.out.println("Invalid Username and Password");
+						System.out.println("Invalid Username and Password"); // error handling, if .next() dont iterate, the query didn't retieve anything and therefore returns false
 						System.out.print("Press Enter to continue...");
 						scan.nextLine();
 					}
@@ -81,18 +88,24 @@ public class UserLogin {
 					connect.close();
 				
 			}catch(Exception e) {
-				e.printStackTrace();
+				System.out.println("Invalid Username and Password"); // error handling
+				System.out.print("Press Enter to continue...");
+				scan.nextLine();
 			}
 		}while(ctr);
 	}
+	
+	
 
 	static String getDatabase_URL() {
 		return database_URL;
 	}
 	
+	
 	static String getDatabase_username() {
 		return database_username;
 	}
+	
 	
 	static String getDatabase_password() {
 		return database_password;
