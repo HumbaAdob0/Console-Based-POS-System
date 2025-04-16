@@ -68,7 +68,7 @@ public class Database_Utility {
 				statement.setObject(i+1, params[i]); // the '?' in our sqlQuery syntax is being replace by the value of params[i]
 			}
 			
-			ResultSet result = statement.executeQuery(); // //this execute our query and returns rows of data stored in the ResultSet
+			ResultSet result = statement.executeQuery(); // this execute our query and returns rows of data stored in the ResultSet
 			return new Object[]{connect,result};
 			
 		}catch(Exception e) {

@@ -13,8 +13,11 @@ public class Base_user{
 	UserLogin user_login = new UserLogin();
 	
 	/*
-	 * This parameter username came from the query of UserLogin class.
-	 * The username is then used to query for the acc_type and name of the account.
+	 * This method queries for 'acc_type' and 'name' for a greetings.
+	 * 
+	 * @param username came from the query of UserLogin class
+	 * the username is then used to query for the acc_type and name of the account
+	 * 
 	 */
 	Base_user(String username){
 		try {
@@ -26,7 +29,7 @@ public class Base_user{
 			
 			if(result.next()){
 				System.out.println("Hi " +result.getString("acc_type") +" " +result.getString("name") +"!");
-				base_user_Dashboard(result.getString("name"));
+				base_user_Dashboard(result.getString("name"));// name is passed to know who did the process during a sale transaction
 			}
 			else {
 				System.out.println("\nERROR: Name and role not found!");
@@ -42,6 +45,10 @@ public class Base_user{
 	}
 	
 	
+	
+	/*
+	 * This is the dashboard for our base user, it only has two option either to make a sale or logout
+	 */
 	void base_user_Dashboard(String name) {
 		int choice; //the variable where our input is stored
 		boolean ctr = true; //this is the control variable that help us check whether the inputed value is correct
@@ -51,16 +58,19 @@ public class Base_user{
 				+ "[a] Make a sale\n"
 				+ "[b] Logout\n");
 		System.out.print("Enter your choice: ");
-		choice = Character.toLowerCase(scan.next().charAt(0));
-		scan.nextLine();
+		choice = Character.toLowerCase(scan.next().charAt(0)); // input is automatically made into lowercase to avoid error in comparing the value at switch
+		scan.nextLine(); 
 		
-		if(choice =='a') {
+		switch(choice) {
+		case 'a':
 			make_a_sale(name);
-		}
-		else if(choice =='b') {
+			break;
+			
+		case 'b':
 			ctr = false;
-		}
-		else{
+			break;
+			
+		default:
 			System.out.println("\nERROR: Invalid input!\n"
 					+ "Press Enter to try again...");
 			scan.nextLine();
@@ -69,10 +79,15 @@ public class Base_user{
 		user_login.newLine();
 		
 		}while(ctr);
-		
 	}
 	
 	
+	
+	
+	/*
+	 * This method is where the item's code/ barcode is inputed and the quantity of the item.
+	 * 
+	 */
 	void make_a_sale(String name) {
 		boolean ctr = true;
 		String item_code;
@@ -85,6 +100,7 @@ public class Base_user{
 					System.out.println("M A K E  A  S A L E\n");
 					System.out.print("Enter product code: ");
 					item_code = scan.nextLine();
+					
 					
 					
 					System.out.print("Enter quantity: ");
@@ -101,10 +117,10 @@ public class Base_user{
 					
 					switch(choice) {
 						case 'a':
-							if(store_to_current_sale(item_code, quantity, name)!=true) {
-								break;
-							}
-							list_of_purchase();
+							if(store_to_current_sale(item_code, quantity, name)!=true) { // the method 'store_to_current_sale' returns boolean value
+								break;													 // the logic here is that when 'store_to_current_sale' returns false, it means that updating the database wasn't successful
+							}															 // this conditional statement would be true, executing the break keyword
+							list_of_purchase();											 //  and terminating the whole switch statement and going back to the start since its a do-while loop
 							break;
 							
 						case 'b':
@@ -112,13 +128,14 @@ public class Base_user{
 							break;
 							
 						default:
-							System.out.println("\nERROR: Invalid input!\n"
+							System.out.print("\nERROR: Invalid input!\n" // this error handling is when user input value that isnt within the switch case option
 									+ "Press Enter to try again...");
 							scan.nextLine();
 				}
 			}catch(Exception e) {
-				System.out.println("\nERROR: Invalid input!\n"
+				System.out.print("\nERROR: Invalid input!\n" // this error handling is when I inputted the quantity values that is not int data type
 						+ "Press Enter to try again...");
+				scan.nextLine();
 				scan.nextLine();
 			}
 				
@@ -126,6 +143,11 @@ public class Base_user{
 	
 	}
 	
+	
+	
+	/*
+	 * This sums up the 'total_price' in our database
+	 */
 	void current_sale_total(){
 		try {
 		String sqlQuery = "select sum(total_price) as total_amount from current_sale";
@@ -135,15 +157,21 @@ public class Base_user{
 		ResultSet result = (ResultSet) result_from_query[1];
 		
 		if(result.next()) {
-			System.out.println("\n\t\t\t\t\t\t\t\t\t\t\t\t\t\t Total Amount: " +result.getString("total_amount"));
+			System.out.print("\n\t\t\t\t\t\t\t\t\t\t\t\t\t\t Total Amount: "); 
+			if(result.getString("total_amount")==null) { // Every time the 'current_sale' table is empty it would return and print null
+				System.out.println("0.00");				 //so what i did is when it's null it would print '0.00' and when it has value it would print the actual value
+			}
+			else {
+				System.out.println(result.getString("total_amount"));
+			}
 		}
-		else {
-			System.out.println("ERROR: No data found!");
-		}
+		
 		Database_Utility.close(connect);
 		
 		}catch(Exception e) {
-			e.printStackTrace();
+			System.out.print("\nERROR: No data found!\n"
+					+ "Press Enter to try again...");
+			scan.nextLine();
 		}
 	}
 	
