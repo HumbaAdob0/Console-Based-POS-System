@@ -175,6 +175,17 @@ public class Base_user{
 		}
 	}
 	
+	
+	
+	/*
+	 * This method recieves a ResultSet object(similar to a table) then the loop below would iterate the contents of the ResultSet
+	 * made this method for reusability
+	 * 
+	 * used the format specifier to display the values of the table (e.g. %d(int)
+	 * the '-' means left aligned
+	 * the number int the format specifier means the reserve spaces
+	 * 
+	 */
 	void current_sale_table(ResultSet result) {
 		try {
 		
@@ -189,6 +200,13 @@ public class Base_user{
 		}
 	}
 	
+	
+	
+	
+	/*
+	 * This method is where the Query is, and then being passed to the 'current_sale_table'
+	 * this method also redirect us to the methods of the actions we want to do through switch
+	 */
 	void list_of_purchase() {
 		
 		char choice;
@@ -233,7 +251,6 @@ public class Base_user{
 				}
 				else if(choice == 'e') {
 					current_sale_deleteAll_back();
-					//add delete all method
 					ctr = false;
 				}
 				else {
@@ -248,6 +265,11 @@ public class Base_user{
 		}while(ctr);
 	}
 	
+	
+	
+	/*
+	 * When a sale(current_sale) is completed the info is then transfered to the 'sale' table where all successful transaction is stored
+	 */
 	void complete_current_sale() {
 		boolean ctr = true;
 		do {
@@ -294,6 +316,12 @@ public class Base_user{
 		}
 	
 
+	
+	/*
+	 * This method lets you pick which info you want to edit
+	 * In this role(base user or cashier) it is only allowed to edit two info which is the item_code and quantity
+	 * 
+	 */
 	void edit_current_sale(){
 		
 		boolean ctr = true;
@@ -325,11 +353,11 @@ public class Base_user{
 			
 	
 			
-			for(int i = 1; i<=item_want_to_edit; i++) {
+			for(int i = 1; i<=item_want_to_edit; i++) { // this loop iterates on the ResultSet(table) until 'i' equals to our 'item_want_to_edit' 
 				result.next();
 				if(i == item_want_to_edit) {
 					
-					switch(part_to_edit) {
+					switch(part_to_edit) {	//after looking for the item we want to edit, this switch statement picks the info we want to edit
 					case 'a':
 							String sqlUpdate_item_code = "UPDATE current_sale SET item_code = ? WHERE sale_code = ?";
 							System.out.print("Enter new item code: ");
@@ -369,9 +397,7 @@ public class Base_user{
 						break;
 						
 					case 'c':
-						
 							ctr = false;
-							
 						break;
 						
 					default:
@@ -395,6 +421,9 @@ public class Base_user{
 	}
 	
 	
+	/*
+	 * This deletes an item to our 'current_sale'
+	 */
 	void current_sale_delete_an_item(){
 		user_login.newLine();
 		boolean ctr = true;
@@ -430,13 +459,22 @@ public class Base_user{
 		while(ctr);
 	}
 	
-	
+	/*
+	 * This deletes all the info inside the 'current_sale'
+	 */
 	void current_sale_deleteAll_back() {
 		String sqlUpdate = "DELETE FROM current_sale";
 		Object[] result_from_update = Database_Utility.update(sqlUpdate);
 		
 	}
 	
+	
+	
+	/*
+	 * This is used when storing new items to the database
+	 * it returns true if it was stored sucessfull
+	 * and false when not
+	 */
 	boolean store_to_current_sale(String item_code, int quantity, String name){
 		
 		try {
