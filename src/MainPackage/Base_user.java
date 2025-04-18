@@ -121,6 +121,7 @@ public class Base_user{
 								break;													 // the logic here is that when 'store_to_current_sale' returns false, it means that updating the database wasn't successful
 							}															 // this conditional statement would be true, executing the break keyword
 							list_of_purchase();											 //  and terminating the whole switch statement and going back to the start since its a do-while loop
+							ctr = false;
 							break;
 							
 						case 'b':
@@ -239,6 +240,7 @@ public class Base_user{
 				
 				if(choice == 'a') {
 					complete_current_sale();
+					ctr = false;
 				}
 				else if(choice == 'b') {
 					ctr = false;
@@ -272,46 +274,43 @@ public class Base_user{
 	 */
 	void complete_current_sale() {
 		boolean ctr = true;
+		char choice;
 		do {
-			user_login.newLine();
-			System.out.print("Confirm to complete the sale\n\n"
-					+ "[a]Confirm\n"
-					+ "[b]Back\n"
-					+ "Enter your choice: ");
-			switch(scan.next().charAt(0)) {
-				case 'a':
-					try{
-						String sqlUpdate1 = "INSERT INTO sales select * from current_sale";
-						Object[] result_from_update1 = Database_Utility.update(sqlUpdate1);
-						int result1 = (int) result_from_update1[1];
-						Database_Utility.close((Connection) result_from_update1[0]); 
-						
-						String sqlUpdate2 = "DELETE FROM current_sale";
-						Object[] result_from_update2 = Database_Utility.update(sqlUpdate2);
- 						int result2 = (int) result_from_update2[1];
- 						Database_Utility.close((Connection) result_from_update2[0]);
-							if(result1>0 && result2>0) {
-								
-							}
-							else {
-								System.out.println("ERROR: Can't Upadate sales!\n"
-										+ "Press Enter to try again...");
-								scan.nextLine();
-							}
+				user_login.newLine();
+				System.out.print("Confirm to complete the sale\n\n"
+						+ "[a]Confirm\n"
+						+ "[b]Back\n"
+						+ "Enter your choice: ");
+				choice = scan.next().charAt(0);
+				scan.nextLine();
+				switch(choice) {
+					case 'a':
+						try{
+							String sqlUpdate1 = "INSERT INTO sales select * from current_sale";
+							Object[] result_from_update1 = Database_Utility.update(sqlUpdate1);
+							int result1 = (int) result_from_update1[1];
+							Database_Utility.close((Connection) result_from_update1[0]); 
+							
+							String sqlUpdate2 = "DELETE FROM current_sale";
+							Object[] result_from_update2 = Database_Utility.update(sqlUpdate2);
+	 						int result2 = (int) result_from_update2[1];
+	 						Database_Utility.close((Connection) result_from_update2[0]);
+							ctr = false;
+							
+						}catch(Exception e) {
+							System.out.println("\nERROR: Can't complete transaction!\n"
+									+ "Press Enter to try again...");
+							scan.nextLine();
+						}
+						break;
+					case 'b':
 						ctr = false;
-					}catch(Exception e) {
-						e.printStackTrace();
-					}
-					break;
-				case 'b':
-					ctr = false;
-					break;
-				default:
-					System.out.println("ERROR:Invalid input!\n"
-							+ "Press Enter to try again...");
-					scan.nextLine();
-					break;
-			}
+						break;
+					default:
+						System.out.println("ERROR:Invalid input!\n"
+								+ "Press Enter to try again...");
+						scan.nextLine();
+				}
 		}while(ctr);	
 		}
 	
@@ -368,7 +367,7 @@ public class Base_user{
 							int result_in_edit =(int) result_from_update_item_code[1];
 							
 							if(result_in_edit>0) {
-								
+								ctr = false;
 							}
 							else {
 								System.out.println("ERROR: Update failed!");
@@ -387,10 +386,12 @@ public class Base_user{
 							int result_in_edit_quantity =(int) result_from_update_quantity[1];
 							
 							if(result_in_edit_quantity>0) {
-								
+								ctr = false;
 							}
 							else {
-								System.out.println("ERROR: Update failed!");
+								System.out.println("\nERROR: Invalid input!\n"
+										+ "Press Enter to try again...");
+								scan.nextLine();
 							}
 							
 							Database_Utility.close(connect_in_edit_quantity);
@@ -413,7 +414,9 @@ public class Base_user{
 			
 			
 			}catch(Exception e) {
-				e.printStackTrace();
+				System.out.println("\nERROR: Invalid input!\n"
+						+ "Press Enter to try again...");
+				scan.nextLine();
 			}
 			
 			}while(ctr);
