@@ -47,7 +47,7 @@ public class UserLogin {
 			
 			//this connection here creates a connection to our databse using the private global variable initialized above.
 			try(Connection connect = DriverManager.getConnection(database_URL,database_username, database_password)){
-				String SQLquery = "SELECT acc_type FROM accounts WHERE username = ?  AND password = ?"; 
+				String SQLquery = "SELECT acc_type, name FROM accounts WHERE username = ?  AND password = ?"; 
 				
 				
 				PreparedStatement statement = connect.prepareStatement(SQLquery);
@@ -69,11 +69,13 @@ public class UserLogin {
 							case "moderator":
 								newLine();
 								Moderator moderator = new Moderator(username); // execute class moderator
+								moderator.moderator_Dashboard(result.getString("name"));
 							break;
 							
 							case "cashier":
 								newLine();
 								Base_user base_user = new Base_user(username); // execute class base_user
+								base_user.base_user_Dashboard(result.getString("name"));
 							break;
 						}
 						

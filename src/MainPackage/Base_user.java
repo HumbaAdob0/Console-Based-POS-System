@@ -29,7 +29,7 @@ public class Base_user{
 			
 			if(result.next()){
 				System.out.println("Hi " +result.getString("acc_type") +" " +result.getString("name") +"!");
-				base_user_Dashboard(result.getString("name"));// name is passed to know who did the process during a sale transaction
+//				base_user_Dashboard(result.getString("name"));// name is passed to know who did the process during a sale transaction
 			}
 			else {
 				System.out.println("\nERROR: Name and role not found!");
@@ -50,7 +50,7 @@ public class Base_user{
 	 * This is the dashboard for our base user, it only has two option either to make a sale or logout
 	 */
 	void base_user_Dashboard(String name) {
-		int choice; //the variable where our input is stored
+		char choice; //the variable where our input is stored
 		boolean ctr = true; //this is the control variable that help us check whether the inputed value is correct
 		
 		do {
@@ -71,9 +71,7 @@ public class Base_user{
 			break;
 			
 		default:
-			System.out.println("\nERROR: Invalid input!\n"
-					+ "Press Enter to try again...");
-			scan.nextLine();
+			invalid_input_error_Message();
 		}
 		
 		user_login.newLine();
@@ -129,14 +127,11 @@ public class Base_user{
 							break;
 							
 						default:
-							System.out.print("\nERROR: Invalid input!\n" // this error handling is when user input value that isnt within the switch case option
-									+ "Press Enter to try again...");
-							scan.nextLine();
+							invalid_input_error_Message(); // this error handling is when user input value that isnt within the switch case option
+						
 				}
 			}catch(Exception e) {
-				System.out.print("\nERROR: Invalid input!\n" // this error handling is when I inputted the quantity values that is not int data type
-						+ "Press Enter to try again...");
-				scan.nextLine();
+				invalid_input_error_Message(); // this error handling is when I inputted the quantity values that is not int data type
 				scan.nextLine();
 			}
 				
@@ -170,9 +165,7 @@ public class Base_user{
 		Database_Utility.close(connect);
 		
 		}catch(Exception e) {
-			System.out.print("\nERROR: No data found!\n"
-					+ "Press Enter to try again...");
-			scan.nextLine();
+			invalid_input_error_Message();
 		}
 	}
 	
@@ -256,9 +249,7 @@ public class Base_user{
 					ctr = false;
 				}
 				else {
-					System.out.println("\nERROR: Invalid input!\n"
-							+ "Press Enter to try again...");
-					scan.nextLine();
+					invalid_input_error_Message();
 				}
 				
 			}catch(Exception e) {
@@ -307,9 +298,7 @@ public class Base_user{
 						ctr = false;
 						break;
 					default:
-						System.out.println("ERROR:Invalid input!\n"
-								+ "Press Enter to try again...");
-						scan.nextLine();
+						invalid_input_error_Message();
 				}
 		}while(ctr);	
 		}
@@ -389,9 +378,7 @@ public class Base_user{
 								ctr = false;
 							}
 							else {
-								System.out.println("\nERROR: Invalid input!\n"
-										+ "Press Enter to try again...");
-								scan.nextLine();
+								invalid_input_error_Message();
 							}
 							
 							Database_Utility.close(connect_in_edit_quantity);
@@ -402,9 +389,7 @@ public class Base_user{
 						break;
 						
 					default:
-						System.out.println("\nERROR: Invalid input!\n"
-								+ "Press Enter to try again...");
-						scan.nextLine();
+						invalid_input_error_Message();
 				}
 					
 				}
@@ -414,9 +399,7 @@ public class Base_user{
 			
 			
 			}catch(Exception e) {
-				System.out.println("\nERROR: Invalid input!\n"
-						+ "Press Enter to try again...");
-				scan.nextLine();
+				invalid_input_error_Message();
 			}
 			
 			}while(ctr);
@@ -454,9 +437,7 @@ public class Base_user{
 					ctr = false;
 				}
 				else {
-					System.out.print("ERROR: Invalid input!"
-							+ "Press Enter to try again...");
-					scan.nextLine();
+					invalid_input_error_Message();
 				}
 		}
 		while(ctr);
@@ -494,11 +475,15 @@ public class Base_user{
 					return false;
 				}
 		}catch(Exception e) {
-			System.out.print("\nERROR: Invalid input!\n"
-							+ "Press Enter to try again...");
-			scan.nextLine();
+			invalid_input_error_Message();
 			return false;
 		}
+	}
+	
+	void invalid_input_error_Message() {
+		System.out.print("\nERROR: Invalid input!\n"
+				+ "Press Enter to try again...");
+		scan.nextLine();
 	}
 	
 	
