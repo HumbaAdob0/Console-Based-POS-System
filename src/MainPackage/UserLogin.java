@@ -63,7 +63,8 @@ public class UserLogin {
 						switch(acc_type.toLowerCase()) { // this makes out retrived data lowercase, so that it wont get an error if we compare it to a predermined value 
 							case "admin":
 								newLine();
-								Admin admin = new Admin(username); // execute class admin 
+								Admin admin = new Admin(username); // execute class admin
+								admin.admin_Dashboard();
 							break;
 							
 							case "moderator":

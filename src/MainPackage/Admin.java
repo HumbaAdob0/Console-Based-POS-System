@@ -11,5 +11,12 @@ Admin(String username){
 		super(username); //This class inherit to the parent class Base_user, the super keyword refers to the parent class constructor
 						 //the param username came from the UserLogin Class
 	}
+
+	void admin_Dashboard() {
+	boolean ctr = true;
+	do{
+		//block of codes
+	}while(ctr);
+	}
 		
 }

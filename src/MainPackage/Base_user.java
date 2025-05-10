@@ -1,10 +1,7 @@
 package MainPackage;
 
 import java.sql.Connection;
-import java.sql.DriverManager;
-import java.sql.PreparedStatement;
 import java.sql.ResultSet;
-import java.sql.Statement;
 import java.util.Scanner;
 
 public class Base_user{
@@ -180,7 +177,7 @@ public class Base_user{
 	 * the number int the format specifier means the reserve spaces
 	 * 
 	 */
-	void current_sale_table(ResultSet result) {
+	void table(ResultSet result) {
 		try {
 		
 		System.out.print("-------------------------------------------------------------------------------------------------------------------------------------\n");
@@ -215,7 +212,7 @@ public class Base_user{
 				
 				user_login.newLine();
 				System.out.println("L I S T  O F  P U R C H A S E\n");
-				current_sale_table(result);
+				table(result);
 				
 				Database_Utility.close(connect);
 				
@@ -323,7 +320,7 @@ public class Base_user{
 			
 			user_login.newLine();
 			System.out.println("E D I T\n");
-			current_sale_table(result);
+			table(result);
 			
 			current_sale_total();
 			
@@ -421,7 +418,7 @@ public class Base_user{
 				ResultSet result1 = (ResultSet) result_from_query[1];
 				
 				System.out.println("D E L E T E  A N  I T E M\n");
-				current_sale_table(result1);
+				table(result1);
 				current_sale_total();
 				
 				System.out.print("\n\nEnter the sale code you of the item you want to delete: ");
