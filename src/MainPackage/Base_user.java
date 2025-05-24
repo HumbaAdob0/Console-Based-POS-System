@@ -16,29 +16,30 @@ public class Base_user{
 	 * the username is then used to query for the acc_type and name of the account
 	 * 
 	 */
-	Base_user(String username){
+	Base_user(){
+		
+	}
+
+	void greetings(String username){
 		try {
-			String sqlQuery = "SELECT name, acc_type FROM accounts WHERE username = ?";	
+			String sqlQuery = "SELECT name, acc_type FROM accounts WHERE username = ?";
 			Object[] result_from_query = Database_Utility.query(sqlQuery, username);
-			
+
 			Connection connect = (Connection)result_from_query[0];
 			ResultSet result = (ResultSet)result_from_query[1];
-			
+
 			if(result.next()){
 				System.out.println("Hi " +result.getString("acc_type") +" " +result.getString("name") +"!");
-//				base_user_Dashboard(result.getString("name"));// name is passed to know who did the process during a sale transaction
 			}
 			else {
 				System.out.println("\nERROR: Name and role not found!");
 			}
-			
+
 			Database_Utility.close(connect);
-			
+
 		}catch(Exception e) {
 			e.printStackTrace();
 		}
-		
-		
 	}
 	
 	
@@ -54,11 +55,9 @@ public class Base_user{
 		System.out.println("\nD A S H B O A R D\n\n"  
 				+ "[a] Make a sale\n"
 				+ "[b] Logout\n");
-		System.out.print("Enter your choice: ");
-		choice = Character.toLowerCase(scan.next().charAt(0)); // input is automatically made into lowercase to avoid error in comparing the value at switch
-		scan.nextLine(); 
+
 		
-		switch(choice) {
+		switch(choice()) {
 		case 'a':
 			make_a_sale(name);
 			break;
@@ -95,6 +94,7 @@ public class Base_user{
 					System.out.println("M A K E  A  S A L E\n");
 					System.out.print("Enter product code: ");
 					item_code = scan.nextLine();
+
 					
 					
 					
@@ -105,12 +105,9 @@ public class Base_user{
 					
 					System.out.println("\n[a]Done\n"
 							+ "[b]Back\n");
+
 					
-					System.out.print("Enter choice: ");
-					choice = Character.toLowerCase(scan.next().charAt(0));
-					scan.nextLine();
-					
-					switch(choice) {
+					switch(choice()) {
 						case 'a':
 							if(store_to_current_sale(item_code, quantity, name)!=true) { // the method 'store_to_current_sale' returns boolean value
 								break;													 // the logic here is that when 'store_to_current_sale' returns false, it means that updating the database wasn't successful
@@ -223,30 +220,27 @@ public class Base_user{
 								+ "[c]Edit\n"
 								+ "[d]Delete an Item\n"
 								+ "[e]Delete All & Back\n");
-				
-				System.out.print("Enter choice: ");
-				choice = Character.toLowerCase(scan.next().charAt(0));
-				scan.nextLine();
-				
-				if(choice == 'a') {
-					complete_current_sale();
-					ctr = false;
-				}
-				else if(choice == 'b') {
-					ctr = false;
-				}
-				else if(choice == 'c') {
-					edit_current_sale();
-				}
-				else if(choice == 'd') {
-					current_sale_delete_an_item();
-				}
-				else if(choice == 'e') {
-					current_sale_deleteAll_back();
-					ctr = false;
-				}
-				else {
-					invalid_input_error_Message();
+
+				switch (choice()){
+					case 'a':
+						complete_current_sale();
+						ctr = false;
+						break;
+					case 'b':
+						ctr = false;
+						break;
+					case 'c':
+						edit_current_sale();
+						break;
+					case 'd':
+						current_sale_delete_an_item();
+						break;
+					case 'e':
+						current_sale_deleteAll_back();
+						ctr = false;
+						break;
+					default:
+						invalid_input_error_Message();
 				}
 				
 			}catch(Exception e) {
@@ -269,9 +263,7 @@ public class Base_user{
 						+ "[a]Confirm\n"
 						+ "[b]Back\n"
 						+ "Enter your choice: ");
-				choice = scan.next().charAt(0);
-				scan.nextLine();
-				switch(choice) {
+				switch(choice()) {
 					case 'a':
 						try{
 							String sqlUpdate1 = "INSERT INTO sales select * from current_sale";
@@ -479,12 +471,23 @@ public class Base_user{
 	
 	void invalid_input_error_Message() {
 		System.out.print("\nERROR: Invalid input!\n"
-				+ "Press Enter to try again...");
+				+ "Press Enter to continue...");
 		scan.nextLine();
 	}
-	
-	
-	
+
+	void success_Message() {
+		System.out.print("\nSUCCESS!\n"
+				+ "Press Enter to continue...");
+		scan.nextLine();
+	}
+
+
+	char choice(){
+		System.out.print("Enter your choice: ");
+		char choice = Character.toLowerCase(scan.next().charAt(0)); // input is automatically made into lowercase to avoid error in comparing the value at switch
+		scan.nextLine();
+		return choice;
+	}
 	
 	
 }
