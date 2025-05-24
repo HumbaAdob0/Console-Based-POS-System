@@ -11,10 +11,11 @@ public class Moderator extends Base_user {
 	Scanner scan = new Scanner(System.in);
 	UserLogin user_Login = new UserLogin();
 
-	Moderator(String username) {
-		super(username); //This class inherit to the parent class Base_user, the super keyword refers to the parent class constructor
-		//the param username came from the UserLogin Class
+	Moderator() {
+
 	}
+
+
 
 	void moderator_Dashboard(String name) {
 		char choice;
@@ -26,11 +27,9 @@ public class Moderator extends Base_user {
 					+ "[b] Add Stocks\n"
 					+ "[c] Pull-out Stocks\n"
 					+ "[d] Logout");
-			System.out.print("Enter your choice: ");
-			choice = Character.toLowerCase(scan.next().charAt(0)); // input is automatically made into lowercase to avoid error in comparing the value at switch
-			scan.nextLine();
 
-			switch (choice) {
+
+			switch (choice()) {
 				case 'a':
 					view_sale();
 					break;
@@ -62,10 +61,8 @@ public class Moderator extends Base_user {
 				table(result);
 
 				System.out.println("\n\n[a] back");
-				System.out.print("Enter your choice: ");
-				choice = scan.next().charAt(0);
-				scan.nextLine();
-				switch(choice){
+
+				switch(choice()){
 					case 'a':
 						ctr = false;
 						break;
@@ -107,11 +104,8 @@ public class Moderator extends Base_user {
 
 				System.out.println("\n\n[a] Add Stock\n"
 								+ "[b] Back");
-				System.out.print("Enter your choice: ");
-				choice = scan.next().charAt(0);
-				scan.nextLine();
 
-				switch(choice){
+				switch(choice()){
 					case 'a':
 						add_stocks_case_a();
 						break;
@@ -168,15 +162,14 @@ public class Moderator extends Base_user {
 
 					System.out.println("\n\n[a] Pull-out Stock\n" +
 							"[b] Back");
-					System.out.print("Enter your choice: ");
-					char choice = scan.next().charAt(0);
-					scan.nextLine();
-					switch (choice) {
+
+					switch (choice()) {
 						case 'a':
 							pull_out_stocks_case_a();
 							break;
 						case 'b':
 							ctr = false;
+							break;
 						default:
 							invalid_input_error_Message();
 					}

@@ -63,19 +63,22 @@ public class UserLogin {
 						switch(acc_type.toLowerCase()) { // this makes out retrived data lowercase, so that it wont get an error if we compare it to a predermined value 
 							case "admin":
 								newLine();
-								Admin admin = new Admin(username); // execute class admin
-								admin.admin_Dashboard();
+								Admin admin = new Admin(); // execute class admin
+								admin.greetings(username);
+								admin.admin_Dashboard(result.getString("name"));
 							break;
 							
 							case "moderator":
 								newLine();
-								Moderator moderator = new Moderator(username); // execute class moderator
+								Moderator moderator = new Moderator(); // execute class moderator
+								moderator.greetings(username);
 								moderator.moderator_Dashboard(result.getString("name"));
 							break;
 							
 							case "cashier":
 								newLine();
-								Base_user base_user = new Base_user(username); // execute class base_user
+								Base_user base_user = new Base_user(); // execute class base_user
+								base_user.greetings(username);
 								base_user.base_user_Dashboard(result.getString("name"));
 							break;
 						}
