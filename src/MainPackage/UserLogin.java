@@ -5,6 +5,7 @@ import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.util.Scanner;
+import MainPackage.Database_Utility;
 
 
 
@@ -13,10 +14,7 @@ import java.util.Scanner;
  * in the database. This Class also verify what role you are trying to login.
  */
 public class UserLogin {
-	private static final String database_URL = "jdbc:mysql://127.0.0.1:3306/pos_database";
-	private static final String database_username = "root";
-	private static final String database_password = "computerengineering";
-	
+
 	Scanner scan = new Scanner(System.in);
 	
 	/*
@@ -45,8 +43,8 @@ public class UserLogin {
 			System.out.print("Password: ");
 			String password = scan.nextLine();
 			
-			//this connection here creates a connection to our databse using the private global variable initialized above.
-			try(Connection connect = DriverManager.getConnection(database_URL,database_username, database_password)){
+			//this connection here creates a connection to our database using the connect method of Database_Utility class
+			try(Connection connect = Database_Utility.connect()){
 				String SQLquery = "SELECT acc_type, name FROM accounts WHERE username = ?  AND password = ?"; 
 				
 				
@@ -99,22 +97,6 @@ public class UserLogin {
 				scan.nextLine();
 			}
 		}while(ctr);
-	}
-	
-	
-
-	static String getDatabase_URL() {
-		return database_URL;
-	}
-	
-	
-	static String getDatabase_username() {
-		return database_username;
-	}
-	
-	
-	static String getDatabase_password() {
-		return database_password;
 	}
 	
 }
