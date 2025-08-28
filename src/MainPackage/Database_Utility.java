@@ -1,28 +1,50 @@
 package MainPackage;
 
+import java.io.InputStream;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
+import java.util.Properties;
 
 
 /*
  * This Class make it easy to connect and ask for a query and update database.
  */
 public class Database_Utility {
-	
+
+
+
+	private static Properties getDbProperties(){
+		Properties prop = new Properties();
+		try(InputStream input = Database_Utility.class.getClassLoader().getResourceAsStream("databaseCredentials.properties")){
+			if(input == null){
+				System.out.println("Sorry, unable to find config.properties");
+				return null;
+			}
+			prop.load(input);
+		}catch(Exception e){
+			e.printStackTrace();
+		}
+		return prop;
+	}
+
+
 	/*
 	 * This method can connect to the database—with its reusability, we are able to call this method with a short syntax.
 	 * saving code complexity and space.
 	 */
 	public static Connection connect() {
 		try {
-			return DriverManager.getConnection(UserLogin.getDatabase_URL(), UserLogin.getDatabase_username(), UserLogin.getDatabase_password());
+			Properties prop = getDbProperties();
+				if(prop!=null){
+					return DriverManager.getConnection(prop.getProperty("db.url"), prop.getProperty("db.username"), prop.getProperty("db.password"));
+				}
+			return null;
 		}catch(Exception e) {
 			e.printStackTrace();
 			return null;
 		}
-		
 	}
 	
 	
